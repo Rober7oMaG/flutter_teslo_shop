@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 
 class CustomTextFormField extends StatelessWidget {
-
   final String? label;
   final String? hint;
   final String? errorMessage;
@@ -24,7 +23,6 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final colors = Theme.of(context).colorScheme;
 
     final border = OutlineInputBorder(
@@ -38,7 +36,11 @@ class CustomTextFormField extends StatelessWidget {
       // padding: const EdgeInsets.only(bottom: 0, top: 15),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.only(topLeft: borderRadius, bottomLeft: borderRadius, bottomRight: borderRadius ),
+        borderRadius: const BorderRadius.only(
+          topLeft: borderRadius, 
+          bottomLeft: borderRadius, 
+          bottomRight: borderRadius
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -52,19 +54,31 @@ class CustomTextFormField extends StatelessWidget {
         validator: validator,
         obscureText: obscureText,
         keyboardType: keyboardType,
-        style: const TextStyle( fontSize: 20, color: Colors.black54 ),
+        style: const TextStyle(fontSize: 20, color: Colors.black54),
         decoration: InputDecoration(
-          floatingLabelStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+          floatingLabelStyle: const TextStyle(
+            color: Colors.black, 
+            fontWeight: FontWeight.bold, 
+            fontSize: 18
+          ),
           enabledBorder: border,
           focusedBorder: border,
-          errorBorder: border.copyWith( borderSide: BorderSide( color: Colors.red.shade800 )),
-          focusedErrorBorder: border.copyWith( borderSide: BorderSide( color: Colors.red.shade800 )),
+          errorBorder: border.copyWith(
+            borderSide: const BorderSide(
+              color: Colors.transparent
+            )
+          ),
+          focusedErrorBorder: border.copyWith(
+            borderSide: const BorderSide(
+              color: Colors.transparent
+            )
+          ),
           isDense: true,
           label: label != null ? Text(label!) : null,
           hintText: hint,
           errorText: errorMessage,
           focusColor: colors.primary,
-          // icon: Icon( Icons.supervised_user_circle_outlined, color: colors.primary, )
+          // icon: Icon(Icons.supervised_user_circle_outlined, color: colors.primary)
         ),
       ),
     );

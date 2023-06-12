@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:teslo_shop/features/auth/presentation/providers/providers.dart';
 import 'package:teslo_shop/features/shared/shared.dart';
 
 
@@ -24,7 +26,7 @@ class LoginScreen extends StatelessWidget {
                 const SizedBox( height: 80 ),
                 // Icon Banner
                 const Icon( 
-                  Icons.production_quantity_limits_rounded, 
+                  Icons.shopping_cart_outlined, 
                   color: Colors.white,
                   size: 100,
                 ),
@@ -48,11 +50,28 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class _LoginForm extends StatelessWidget {
+class _LoginForm extends ConsumerWidget {
   const _LoginForm();
 
+  void showSnackbar(BuildContext context, String errorMessage) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(errorMessage),
+        backgroundColor: Colors.red
+      )
+    );
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loginForm = ref.watch(loginFormProvider);
+
+    ref.listen(authProvider, (previous, next) {
+      if (next.errorMessage.isEmpty) return;
+
+      showSnackbar(context, next.errorMessage);
+    });
 
     final textStyles = Theme.of(context).textTheme;
 
@@ -60,49 +79,57 @@ class _LoginForm extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: [
-          const SizedBox( height: 50 ),
-          Text('Login', style: textStyles.titleLarge ),
-          const SizedBox( height: 90 ),
+          const SizedBox(height: 50),
+          Text('Login', style: textStyles.titleLarge),
+          const SizedBox(height: 90),
 
-          const CustomTextFormField(
-            label: 'Correo',
+          CustomTextFormField(
+            label: 'Email',
             keyboardType: TextInputType.emailAddress,
+            onChanged: ref.read(loginFormProvider.notifier).onEmailChanged,
+            errorMessage: loginForm.isFormPosted 
+              ? loginForm.email.errorMessage
+              : null,
           ),
-          const SizedBox( height: 30 ),
+          const SizedBox(height: 30),
 
-          const CustomTextFormField(
-            label: 'Contraseña',
+          CustomTextFormField(
+            label: 'Password',
             obscureText: true,
+            onChanged: ref.read(loginFormProvider.notifier).onPasswordChanged,
+            errorMessage: loginForm.isFormPosted
+              ? loginForm.password.errorMessage
+              : null,
           ),
     
-          const SizedBox( height: 30 ),
+          const SizedBox(height: 30),
 
           SizedBox(
             width: double.infinity,
             height: 60,
             child: CustomFilledButton(
-              text: 'Ingresar',
+              text: 'Sign In',
               buttonColor: Colors.black,
               onPressed: (){
-
+                ref.read(loginFormProvider.notifier).onFormSubmit();
               },
             )
           ),
 
-          const Spacer( flex: 2 ),
+          const Spacer(flex: 2),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('¿No tienes cuenta?'),
+              const Text('¿Don\'t have an account?'),
               TextButton(
-                onPressed: ()=> context.push('/register'), 
-                child: const Text('Crea una aquí')
+                onPressed: () => context.push('/register'), 
+                child: const Text('Create one')
               )
             ],
           ),
 
-          const Spacer( flex: 1),
+          const Spacer(flex: 1),
         ],
       ),
     );

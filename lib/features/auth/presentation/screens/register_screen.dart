@@ -8,7 +8,6 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
     final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
     final textStyles = Theme.of(context).textTheme;
@@ -35,7 +34,10 @@ class RegisterScreen extends StatelessWidget {
                       icon: const Icon( Icons.arrow_back_rounded, size: 40, color: Colors.white )
                     ),
                     const Spacer(flex: 1),
-                    Text('Crear cuenta', style: textStyles.titleLarge?.copyWith(color: Colors.white )),
+                    Text(
+                      'Sign Up', 
+                      style: textStyles.titleLarge?.copyWith(color: Colors.white )
+                    ),
                     const Spacer(flex: 2),
                   ],
                 ),
@@ -73,30 +75,30 @@ class _RegisterForm extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox( height: 50 ),
-          Text('Nueva cuenta', style: textStyles.titleMedium ),
+          Text('Register', style: textStyles.titleMedium ),
           const SizedBox( height: 50 ),
 
           const CustomTextFormField(
-            label: 'Nombre completo',
+            label: 'Full Name',
             keyboardType: TextInputType.emailAddress,
           ),
           const SizedBox( height: 30 ),
 
           const CustomTextFormField(
-            label: 'Correo',
+            label: 'Email',
             keyboardType: TextInputType.emailAddress,
           ),
           const SizedBox( height: 30 ),
 
           const CustomTextFormField(
-            label: 'Contraseña',
+            label: 'Password',
             obscureText: true,
           ),
     
           const SizedBox( height: 30 ),
 
           const CustomTextFormField(
-            label: 'Repita la contraseña',
+            label: 'Repeat your password',
             obscureText: true,
           ),
     
@@ -106,7 +108,7 @@ class _RegisterForm extends StatelessWidget {
             width: double.infinity,
             height: 60,
             child: CustomFilledButton(
-              text: 'Crear',
+              text: 'Create Account',
               buttonColor: Colors.black,
               onPressed: (){
 
@@ -119,7 +121,7 @@ class _RegisterForm extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('¿Ya tienes cuenta?'),
+              const Text('Already have an account?'),
               TextButton(
                 onPressed: (){
                   if ( context.canPop()){
@@ -128,7 +130,7 @@ class _RegisterForm extends StatelessWidget {
                   context.go('/login');
                   
                 }, 
-                child: const Text('Ingresa aquí')
+                child: const Text('Sign In')
               )
             ],
           ),

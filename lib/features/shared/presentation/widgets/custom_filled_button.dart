@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class CustomFilledButton extends StatelessWidget {
-
   final void Function()? onPressed;
   final String text;
   final Color? buttonColor;
@@ -15,7 +14,6 @@ class CustomFilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     const radius = Radius.circular(10);
 
     return FilledButton(
@@ -28,8 +26,6 @@ class CustomFilledButton extends StatelessWidget {
           topLeft: radius,
         )
       )),
-        
-  
       onPressed: onPressed, 
       child: Text(text)
     );

@@ -10,8 +10,7 @@ class GeometricalBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
-    final borderSize = size.width / 7; // Este es el tamaño para colocar 7 elementos
-
+    final borderSize = size.width / 7; // Size for 7 elements
 
     final shapeWidgets = [
       _Circle(borderSize),
@@ -23,11 +22,9 @@ class GeometricalBackground extends StatelessWidget {
       _SemiCircleInverted(borderSize),
     ];
 
-
     return SizedBox.expand(
       child: Stack(
         children: [
-
           Positioned(child: Container(color: backgroundColor)),
 
           // Background with shapes
@@ -48,9 +45,6 @@ class GeometricalBackground extends StatelessWidget {
               ],
             )
           ),
-
-          
-
           // Child widget
           child,
         ],
@@ -75,12 +69,12 @@ class ShapeRow extends StatefulWidget {
 }
 
 class _ShapeRowState extends State<ShapeRow> {
-
   late List<Widget> shapeMixedUp;
 
   @override
   void initState() {
     super.initState();
+    
     shapeMixedUp = [...widget.shapeWidgets];
     shapeMixedUp.shuffle();
   }
@@ -114,7 +108,6 @@ class _Square extends StatelessWidget {
 
   const _Square(this.borderSize);
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -145,7 +138,6 @@ class _RightTriangle extends StatelessWidget {
 }
 
 class _RightTrianglePainter extends CustomPainter {
-
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
@@ -182,7 +174,6 @@ class _LeftTriangle extends StatelessWidget {
 }
 
 class _LeftTrianglePainter extends CustomPainter {
-
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
@@ -219,7 +210,6 @@ class _Diamond extends StatelessWidget {
 }
 
 class _DiamondPainter extends CustomPainter {
-
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
@@ -258,7 +248,6 @@ class _SemiCircle extends StatelessWidget {
 }
 
 class _SemiCirclePainter extends CustomPainter {
-
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
@@ -281,6 +270,7 @@ class _SemiCirclePainter extends CustomPainter {
   @override
   bool shouldRepaint(_SemiCirclePainter oldDelegate) => false;
 }
+
 class _SemiCircleInverted extends StatelessWidget {
   final double borderSize;
 
@@ -299,7 +289,6 @@ class _SemiCircleInverted extends StatelessWidget {
 }
 
 class _SemiCircleInvertedPainter extends CustomPainter {
-
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
@@ -322,4 +311,3 @@ class _SemiCircleInvertedPainter extends CustomPainter {
   @override
   bool shouldRepaint(_SemiCircleInvertedPainter oldDelegate) => false;
 }
-
