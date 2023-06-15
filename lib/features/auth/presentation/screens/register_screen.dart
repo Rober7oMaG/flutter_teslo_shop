@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:teslo_shop/features/auth/presentation/providers/providers.dart';
+import 'package:teslo_shop/features/auth/presentation/providers/register_form_provider.dart';
 import 'package:teslo_shop/features/shared/shared.dart';
 
 
@@ -28,10 +31,15 @@ class RegisterScreen extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: (){
-                        if ( !context.canPop() ) return;
+                        if (!context.canPop()) return;
+
                         context.pop();
                       }, 
-                      icon: const Icon( Icons.arrow_back_rounded, size: 40, color: Colors.white )
+                      icon: const Icon(
+                        Icons.arrow_back_rounded, 
+                        size: 40, 
+                        color: Colors.white
+                      )
                     ),
                     const Spacer(flex: 1),
                     Text(
@@ -62,11 +70,28 @@ class RegisterScreen extends StatelessWidget {
   }
 }
 
-class _RegisterForm extends StatelessWidget {
+class _RegisterForm extends ConsumerWidget {
   const _RegisterForm();
 
+  void showSnackbar(BuildContext context, String errorMessage) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(errorMessage),
+        backgroundColor: Colors.red
+      )
+    );
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final registerForm = ref.watch(registerFormProvider);
+
+    ref.listen(authProvider, (previous, next) {
+      if (next.errorMessage.isEmpty) return;
+
+      showSnackbar(context, next.errorMessage);
+    });
 
     final textStyles = Theme.of(context).textTheme;
 
@@ -74,35 +99,51 @@ class _RegisterForm extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: [
-          const SizedBox( height: 50 ),
-          Text('Register', style: textStyles.titleMedium ),
-          const SizedBox( height: 50 ),
+          const SizedBox(height: 50),
+          Text('Register', style: textStyles.titleMedium),
+          const SizedBox(height: 50),
 
-          const CustomTextFormField(
+          CustomTextFormField(
             label: 'Full Name',
             keyboardType: TextInputType.emailAddress,
+            onChanged: ref.read(registerFormProvider.notifier).onNameChanged,
+            errorMessage: registerForm.isFormPosted
+              ? registerForm.fullName.errorMessage
+              : null,
           ),
-          const SizedBox( height: 30 ),
+          const SizedBox(height: 30),
 
-          const CustomTextFormField(
+          CustomTextFormField(
             label: 'Email',
             keyboardType: TextInputType.emailAddress,
+            onChanged: ref.read(registerFormProvider.notifier).onEmailChanged,
+            errorMessage: registerForm.isFormPosted
+              ? registerForm.email.errorMessage
+              : null,
           ),
-          const SizedBox( height: 30 ),
+          const SizedBox(height: 30),
 
-          const CustomTextFormField(
+          CustomTextFormField(
             label: 'Password',
             obscureText: true,
+            onChanged: ref.read(registerFormProvider.notifier).onPasswordChanged,
+            errorMessage: registerForm.isFormPosted
+              ? registerForm.password.errorMessage
+              : null,
           ),
     
-          const SizedBox( height: 30 ),
+          const SizedBox(height: 30),
 
-          const CustomTextFormField(
+          CustomTextFormField(
             label: 'Repeat your password',
             obscureText: true,
+            onChanged: ref.read(registerFormProvider.notifier).onPasswordConfirmationChanged,
+            errorMessage: registerForm.isFormPosted
+              ? registerForm.passwordConfirmation.errorMessage
+              : null,
           ),
     
-          const SizedBox( height: 30 ),
+          const SizedBox(height: 30),
 
           SizedBox(
             width: double.infinity,
@@ -110,13 +151,13 @@ class _RegisterForm extends StatelessWidget {
             child: CustomFilledButton(
               text: 'Create Account',
               buttonColor: Colors.black,
-              onPressed: (){
-
-              },
+              onPressed: registerForm.isPosting
+                ? null
+                : ref.read(registerFormProvider.notifier).onFormSubmit,
             )
           ),
 
-          const Spacer( flex: 2 ),
+          const Spacer(flex: 2),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -124,18 +165,18 @@ class _RegisterForm extends StatelessWidget {
               const Text('Already have an account?'),
               TextButton(
                 onPressed: (){
-                  if ( context.canPop()){
+                  if (context.canPop()){
                     return context.pop();
                   }
+
                   context.go('/login');
-                  
                 }, 
                 child: const Text('Sign In')
               )
             ],
           ),
 
-          const Spacer( flex: 1),
+          const Spacer(flex: 1),
         ],
       ),
     );
