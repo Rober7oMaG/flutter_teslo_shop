@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:teslo_shop/features/auth/presentation/providers/auth_provider.dart';
+import 'package:teslo_shop/features/auth/auth.dart';
 import 'package:teslo_shop/features/shared/shared.dart';
 
 class SideMenu extends ConsumerStatefulWidget {
@@ -23,6 +23,8 @@ class SideMenuState extends ConsumerState<SideMenu> {
   Widget build(BuildContext context) {
     final hasNotch = MediaQuery.of(context).viewPadding.top > 35;
     final textStyles = Theme.of(context).textTheme;
+
+    final user = ref.watch(authProvider).user;
     
     return NavigationDrawer(
       elevation: 1,
@@ -40,38 +42,39 @@ class SideMenuState extends ConsumerState<SideMenu> {
 
         Padding(
           padding: EdgeInsets.fromLTRB(20, hasNotch ? 0 : 20, 16, 0),
-          child: Text('Saludos', style: textStyles.titleMedium ),
+          child: Text('Welcome', style: textStyles.titleMedium ),
         ),
 
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 16, 10),
-          child: Text('Tony Stark', style: textStyles.titleSmall ),
+          child: Text(
+            user?.fullName ?? 'User', 
+            style: textStyles.titleSmall
+          ),
         ),
 
         const NavigationDrawerDestination(
-            icon: Icon( Icons.home_outlined ), 
-            label: Text( 'Productos' ),
+            icon: Icon(Icons.home_outlined), 
+            label: Text('Products'),
         ),
-
 
         const Padding(
           padding: EdgeInsets.fromLTRB(28, 16, 28, 10),
           child: Divider(),
         ),
 
-        const Padding(
-          padding: EdgeInsets.fromLTRB(28, 10, 16, 10),
-          child: Text('Otras opciones'),
-        ),
+        // const Padding(
+        //   padding: EdgeInsets.fromLTRB(28, 10, 16, 10),
+        //   child: Text('Other options'),
+        // ),
 
-        
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: CustomFilledButton(
             onPressed: () {
               ref.read(authProvider.notifier).logout();
             },
-            text: 'Cerrar sesión'
+            text: 'Logout'
           ),
         ),
 
