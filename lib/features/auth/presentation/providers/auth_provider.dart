@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:teslo_shop/features/auth/domain/domain.dart';
-import 'package:teslo_shop/features/auth/infrastructure/infrastructure.dart';
-import 'package:teslo_shop/features/shared/infrastructure/services/services.dart';
+import 'package:teslo_shop/features/auth/auth.dart';
+import 'package:teslo_shop/features/shared/shared.dart';
 
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {

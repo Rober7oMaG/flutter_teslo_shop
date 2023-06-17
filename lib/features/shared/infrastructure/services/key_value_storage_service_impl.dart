@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:teslo_shop/features/shared/infrastructure/services/services.dart';
+import 'package:teslo_shop/features/shared/shared.dart';
 
 
 class KeyValueStorageServiceImpl extends KeyValueStorageService {

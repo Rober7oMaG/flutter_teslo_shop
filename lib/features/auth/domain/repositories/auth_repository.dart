@@ -1,4 +1,4 @@
-import 'package:teslo_shop/features/auth/domain/domain.dart';
+import 'package:teslo_shop/features/auth/auth.dart';
 
 
 abstract class AuthRepository {

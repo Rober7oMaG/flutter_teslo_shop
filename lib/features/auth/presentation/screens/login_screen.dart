@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:teslo_shop/features/auth/presentation/providers/providers.dart';
+import 'package:teslo_shop/features/auth/auth.dart';
 import 'package:teslo_shop/features/shared/shared.dart';
 
 
@@ -10,7 +10,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
     final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
 
@@ -97,6 +96,7 @@ class _LoginForm extends ConsumerWidget {
             label: 'Password',
             obscureText: true,
             onChanged: ref.read(loginFormProvider.notifier).onPasswordChanged,
+            onFieldSubmitted: (_) => ref.read(loginFormProvider.notifier).onFormSubmit(),
             errorMessage: loginForm.isFormPosted
               ? loginForm.password.errorMessage
               : null,

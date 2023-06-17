@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:teslo_shop/config/config.dart';
-import 'package:teslo_shop/features/auth/domain/domain.dart';
-import 'package:teslo_shop/features/auth/infrastructure/infrastructure.dart';
+import 'package:teslo_shop/features/auth/auth.dart';
 
 class AuthDataSourceImpl extends AuthDataSource {
   final dio = Dio(
@@ -21,7 +20,7 @@ class AuthDataSourceImpl extends AuthDataSource {
         )
       );
 
-      final user = UserMapper.jsonToUserEntity(response.data);
+      final user = UserMapper.fromJson(response.data);
       return user;
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
@@ -46,7 +45,7 @@ class AuthDataSourceImpl extends AuthDataSource {
         'password': password
       });
 
-      final user = UserMapper.jsonToUserEntity(response.data);
+      final user = UserMapper.fromJson(response.data);
 
       return user;
     } on DioException catch (e) {
@@ -73,7 +72,7 @@ class AuthDataSourceImpl extends AuthDataSource {
         'password': password
       });
 
-      final user = UserMapper.jsonToUserEntity(response.data);
+      final user = UserMapper.fromJson(response.data);
 
       return user;
     } on DioException catch (e) {

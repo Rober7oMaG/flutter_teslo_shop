@@ -1,6 +1,6 @@
 # Flutter - Teslo Shop
 
-This applications us features such as:
+This applications has features such as:
 
 * Cameras
 * Access tokens
