@@ -17,16 +17,72 @@ class ProductsDataSourceImpl extends ProductsDataSource {
     )
   );
 
-  @override
-  Future<Product> createUpdateProduct(Map<String, dynamic> productLike) {
-    // TODO: implement createUpdateProduct
-    throw UnimplementedError();
+  Future<List<String>> _uploadImages(List<String> images) async {
+    final imagesToUpload = images.where((image) => image.contains('/')).toList();
+    final imagesToIgnore = images.where((image) => !image.contains('/')).toList();
+
+    final List<Future<String>> uploadSequence = imagesToUpload.map(
+      (image) => _uploadFile(image)
+    ).toList();
+    
+    final uploadedImages = await Future.wait(uploadSequence);
+
+    return [...imagesToIgnore, ...uploadedImages];
+  }
+
+  Future<String> _uploadFile(String path) async {
+    try {
+      final fileName = path.split('/').last;
+      final FormData data = FormData.fromMap({
+        'file': MultipartFile.fromFileSync(path, filename: fileName)
+      });
+
+      final response = await dio.post('/files/product', data: data);
+
+      return response.data['image'];
+    } catch (e) {
+      throw Exception();
+    }
   }
 
   @override
-  Future<Product> getProductById(String id) {
-    // TODO: implement getProductById
-    throw UnimplementedError();
+  Future<Product> createUpdateProduct(Map<String, dynamic> productLike) async {
+    try {
+      final String? productId = productLike['id'];
+      final String method = (productId == null) ? 'POST' : 'PATCH';
+      final String url = (productId == null) ? '/products' : '/products/$productId';
+
+      productLike.remove('id');
+      productLike['images'] = await _uploadImages(productLike['images']);
+
+      final response = await dio.request(
+        url,
+        data: productLike,
+        options: Options(method: method)
+      );
+
+      final product = ProductMapper.fromJson(response.data);
+
+      return product;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  @override
+  Future<Product> getProductById(String id) async {
+    try {
+      final response = await dio.get('/products/$id');
+      final product = ProductMapper.fromJson(response.data);
+
+      return product;
+    } on DioException catch (e) {
+      if (e.response!.statusCode == 404) throw ProductNotFound();
+
+      throw Exception();
+    } catch (e) {
+      throw Exception();
+    }
   }
 
   @override
